@@ -23,7 +23,7 @@ ACamera::ACamera()
 
 	//Assign SpringArm class variables.
 	SpringArmComp->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 50.0f), FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArmComp->TargetArmLength = 400.f;
+	SpringArmComp->TargetArmLength = 200.f;
 	SpringArmComp->bEnableCameraLag = true;
 	SpringArmComp->CameraLagSpeed = 3.0f;
 	//Take control of the default Player
@@ -41,34 +41,17 @@ void ACamera::BeginPlay()
 void ACamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bZoomingIn)
-	{
-		ZoomFactor += DeltaTime / 0.5f;         //Zoom in over half a second
-	}
-	else
-	{
-		ZoomFactor -= DeltaTime / 0.25f;        //Zoom out over a quarter of a second
-	}
-	ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
-
-	//Blend our camera's FOV and our SpringArm's length based on ZoomFactor
-	CameraComp->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, ZoomFactor);
-	SpringArmComp->TargetArmLength = FMath::Lerp<float>(400.0f, 300.0f, ZoomFactor);
-	FRotator NewRotation = GetActorRotation();
-	NewRotation.Yaw += CameraInput.X;
-	SetActorRotation(NewRotation);
-	NewRotation = SpringArmComp->GetComponentRotation();
-	NewRotation.Pitch = FMath::Clamp(NewRotation.Pitch + CameraInput.Y, -80.0f, -15.0f);
-	SpringArmComp->SetWorldRotation(NewRotation);
-	if (!MovementInput.IsZero())
-	{
-		//Scale our movement input axis values by 100 units per second
-		MovementInput = MovementInput.GetSafeNormal() * 100.0f;
-		FVector NewLocation = GetActorLocation();
-		NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
-		NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
-		SetActorLocation(NewLocation);
-	}
+	//Move the camera based on the input
+	FVector ForwardMovement = GetActorForwardVector() * MovementInput.X;
+	FVector RightMovement = GetActorRightVector() * MovementInput.Y;
+	AddActorWorldOffset((ForwardMovement + RightMovement) * 100.0f * DeltaTime, true);
+	//Zoom the camera based on the input
+	SpringArmComp->TargetArmLength += ZoomFactor;
+	//Clamp the camera zoom
+	SpringArmComp->TargetArmLength = FMath::Clamp(SpringArmComp->TargetArmLength, 150.0f, 400.0f);
+	//Rotate the camera based on the input
+	AddActorLocalRotation(FRotator(CameraInput.Y, CameraInput.X, 0.0f));
+	
 }
 //Input functions
 void ACamera::MoveForward(float AxisValue)
@@ -94,11 +77,25 @@ void ACamera::YawCamera(float AxisValue)
 void ACamera::ZoomIn()
 {
 	bZoomingIn = true;
+	ZoomFactor = -100.0f;
 }
 
 void ACamera::ZoomOut()
 {
 	bZoomingIn = false;
+	ZoomFactor = 100.0f;
+}
+
+void ACamera::Zoom(float AxisValue)
+{
+	if (AxisValue > 0.0f)
+	{
+		ZoomIn();
+	}
+	else if (AxisValue < 0.0f)
+	{
+		ZoomOut();
+	}
 }
 
 // Called to bind functionality to input
@@ -112,8 +109,9 @@ void ACamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//Hook up every-frame handling for our four axes
 	InputComponent->BindAxis("MoveForward", this, &ACamera::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &ACamera::MoveRight);
-	InputComponent->BindAxis("CameraPitch", this, &ACamera::PitchCamera);
-	InputComponent->BindAxis("CameraYaw", this, &ACamera::YawCamera);
-
+	InputComponent->BindAxis("LookUp", this, &ACamera::PitchCamera);
+	InputComponent->BindAxis("Turn", this, &ACamera::YawCamera);
+	InputComponent->BindAxis("Zoom", this, &ACamera::Zoom);
+	
 }
 

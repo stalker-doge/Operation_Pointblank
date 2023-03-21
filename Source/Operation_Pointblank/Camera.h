@@ -41,6 +41,7 @@ protected:
 	void YawCamera(float AxisValue);
 	void ZoomIn();
 	void ZoomOut();
+	void Zoom(float AxisValue);
 
 public:	
 	// Called every frame

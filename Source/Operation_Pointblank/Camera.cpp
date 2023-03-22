@@ -23,11 +23,12 @@ ACamera::ACamera()
 
 	//Assign SpringArm class variables.
 	SpringArmComp->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 50.0f), FRotator(-60.0f, 0.0f, 0.0f));
-	SpringArmComp->TargetArmLength = 200.f;
+	SpringArmComp->TargetArmLength = 100.f;
 	SpringArmComp->bEnableCameraLag = true;
 	SpringArmComp->CameraLagSpeed = 3.0f;
 	//Take control of the default Player
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	_speed = 10;
 }
 
 // Called when the game starts or when spawned
@@ -42,13 +43,13 @@ void ACamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//Move the camera based on the input
-	FVector ForwardMovement = GetActorForwardVector() * MovementInput.X;
-	FVector RightMovement = GetActorRightVector() * MovementInput.Y;
+	FVector ForwardMovement = GetActorForwardVector() * MovementInput.X*_speed;
+	FVector RightMovement = GetActorRightVector() * MovementInput.Y * _speed;
 	AddActorWorldOffset((ForwardMovement + RightMovement) * 100.0f * DeltaTime, true);
 	//Zoom the camera based on the input
 	SpringArmComp->TargetArmLength += ZoomFactor;
 	//Clamp the camera zoom
-	SpringArmComp->TargetArmLength = FMath::Clamp(SpringArmComp->TargetArmLength, 150.0f, 400.0f);
+	SpringArmComp->TargetArmLength = FMath::Clamp(SpringArmComp->TargetArmLength, 100.0f, 400.0f);
 	//Rotate the camera based on the input
 	AddActorLocalRotation(FRotator(CameraInput.Y, CameraInput.X, 0.0f));
 	

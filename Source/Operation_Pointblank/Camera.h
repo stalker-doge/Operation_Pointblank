@@ -33,6 +33,8 @@ protected:
 	FVector2D CameraInput;
 	float ZoomFactor;
 	bool bZoomingIn;
+	UPROPERTY(EditAnywhere,Category="CameraSpeed")
+	float _speed;
 
 	//Input functions
 	void MoveForward(float AxisValue);

@@ -14,7 +14,21 @@ class OPERATION_POINTBLANK_API APlayerCamera : public APawn
 public:
 	// Sets default values for this pawn's properties
 	APlayerCamera();
+	
+	void Zoom(float AxisValue);
+	
+	UPROPERTY(EditAnywhere)
+		class USpringArmComponent* SpringArmComp;
 
+	UPROPERTY(EditAnywhere)
+		class UCameraComponent* CameraComp;
+
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* StaticMeshComp;
+
+	UPROPERTY(EditAnywhere, Category = "CameraSpeed")
+		float _speed;
+	float ZoomFactor;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

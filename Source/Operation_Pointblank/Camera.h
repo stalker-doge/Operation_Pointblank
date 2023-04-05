@@ -19,6 +19,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+	void Zoom(float AxisValue);
+
 	UPROPERTY(EditAnywhere)
 		class USpringArmComponent* SpringArmComp;
 
@@ -28,22 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* StaticMeshComp;
 
-	//Input variables
-	FVector2D MovementInput;
-	FVector2D CameraInput;
+	UPROPERTY(EditAnywhere, Category = "CameraSpeed")
+		float _speed;
 	float ZoomFactor;
-	bool bZoomingIn;
-	UPROPERTY(EditAnywhere,Category="CameraSpeed")
-	float _speed;
-
-	//Input functions
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
-	void PitchCamera(float AxisValue);
-	void YawCamera(float AxisValue);
-	void ZoomIn();
-	void ZoomOut();
-	void Zoom(float AxisValue);
 
 public:	
 	// Called every frame

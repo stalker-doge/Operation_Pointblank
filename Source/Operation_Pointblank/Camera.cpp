@@ -42,61 +42,14 @@ void ACamera::BeginPlay()
 void ACamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//Move the camera based on the input
-	FVector ForwardMovement = GetActorForwardVector() * MovementInput.X*_speed;
-	FVector RightMovement = GetActorRightVector() * MovementInput.Y * _speed;
-	AddActorWorldOffset((ForwardMovement + RightMovement) * 100.0f * DeltaTime, true);
-	//Zoom the camera based on the input
+//Camera Zoom 
 	SpringArmComp->TargetArmLength += ZoomFactor;
-	//Clamp the camera zoom
-	SpringArmComp->TargetArmLength = FMath::Clamp(SpringArmComp->TargetArmLength, 100.0f, 400.0f);
-	//Rotate the camera based on the input
-	AddActorLocalRotation(FRotator(CameraInput.Y, CameraInput.X, 0.0f));
-	
-}
-//Input functions
-void ACamera::MoveForward(float AxisValue)
-{
-	MovementInput.X = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
-}
-
-void ACamera::MoveRight(float AxisValue)
-{
-	MovementInput.Y = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
-}
-
-void ACamera::PitchCamera(float AxisValue)
-{
-	CameraInput.Y = AxisValue;
-}
-
-void ACamera::YawCamera(float AxisValue)
-{
-	CameraInput.X = AxisValue;
-}
-
-void ACamera::ZoomIn()
-{
-	bZoomingIn = true;
-	ZoomFactor = -100.0f;
-}
-
-void ACamera::ZoomOut()
-{
-	bZoomingIn = false;
-	ZoomFactor = 100.0f;
+	SpringArmComp->TargetArmLength = FMath::Clamp(SpringArmComp->TargetArmLength, -500.0f, 500.0f);
 }
 
 void ACamera::Zoom(float AxisValue)
 {
-	if (AxisValue > 0.0f)
-	{
-		ZoomIn();
-	}
-	else if (AxisValue < 0.0f)
-	{
-		ZoomOut();
-	}
+	ZoomFactor = 10 * AxisValue;
 }
 
 // Called to bind functionality to input
@@ -104,14 +57,8 @@ void ACamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	//Hook up events for "ZoomIn"
-	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ACamera::ZoomIn);
-	InputComponent->BindAction("ZoomIn", IE_Released, this, &ACamera::ZoomOut);
 
 	//Hook up every-frame handling for our four axes
-	InputComponent->BindAxis("MoveForward", this, &ACamera::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &ACamera::MoveRight);
-	InputComponent->BindAxis("LookUp", this, &ACamera::PitchCamera);
-	InputComponent->BindAxis("Turn", this, &ACamera::YawCamera);
 	InputComponent->BindAxis("Zoom", this, &ACamera::Zoom);
 	
 }

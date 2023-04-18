@@ -10,7 +10,7 @@
 
 
 UCLASS()
-class OPERATION_POINTBLANK_API AEnemyUnitSpawner : public AUnitSpawner
+class OPERATION_POINTBLANK_API AEnemyUnitSpawner : public AActor
 {
 	GENERATED_BODY()
 	
@@ -18,11 +18,17 @@ public:
 	// Sets default values for this actor's properties
 	AEnemyUnitSpawner();
 
-	UPROPERTY(EditDefaultsOnly, Category = "Units")
+	UPROPERTY(EditAnywhere, Category = "Units")
 		TSubclassOf<AEnemyAI> EnemyAIBP;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Units")
 		void SpawnEnemyUnit();
+	
+	UPROPERTY(EditAnywhere, Category = "UnitsSpawning")
+		float TimeToSpawn = 2.f;
+
+	FActorSpawnParameters SpawnParams;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

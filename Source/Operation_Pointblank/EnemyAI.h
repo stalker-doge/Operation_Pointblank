@@ -15,6 +15,9 @@ public:
 	// Sets default values for this character's properties
 	AEnemyAI();
 
+	UPROPERTY(EditAnywhere, Category = "Units")
+		int _pointCost;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

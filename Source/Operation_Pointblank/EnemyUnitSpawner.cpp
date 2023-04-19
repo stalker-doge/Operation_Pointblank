@@ -9,12 +9,12 @@ AEnemyUnitSpawner::AEnemyUnitSpawner()
 	PrimaryActorTick.bCanEverTick = true;
 	//Create a root component
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	_totalPoints = 50;
 }
 
 void AEnemyUnitSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle OutHandle;
 	//makes a timer that spawns units every 5 seconds
 	GetWorld()->GetTimerManager().SetTimer(OutHandle, this, &AEnemyUnitSpawner::SpawnEnemyUnit, TimeToSpawn, true);
 }
@@ -22,19 +22,21 @@ void AEnemyUnitSpawner::BeginPlay()
 void AEnemyUnitSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (_totalPoints <= 0)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(OutHandle);
+	}
 }
 
 void AEnemyUnitSpawner::SpawnEnemyUnit()
 {
 	if (EnemyAIBP)
 	{
-		//AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBP, GetTransform(), SpawnParams);
-		//tries to spawn enemy units near point but tries to not overlap
-		FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 1000;
+		FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 50;
 		FRotator SpawnRotation = GetActorRotation();
-		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = this;
 		AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBP, SpawnLocation, SpawnRotation, SpawnParams);
+		_totalPoints = _totalPoints - UnitRef->_pointCost;
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Spawned"));
 	}
 	else

@@ -28,6 +28,11 @@ public:
 		float TimeToSpawn = 2.f;
 
 	FActorSpawnParameters SpawnParams;
+
+	FTimerHandle OutHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Units")
+		int _totalPoints;
 	
 protected:
 	// Called when the game starts or when spawned

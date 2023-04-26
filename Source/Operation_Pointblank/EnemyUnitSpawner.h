@@ -24,14 +24,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Units")
 		void SpawnEnemyUnit();
 	
-	UPROPERTY(EditAnywhere, Category = "UnitsSpawning")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "UnitsSpawning")
 		float TimeToSpawn = 2.f;
 
 	FActorSpawnParameters SpawnParams;
 
 	FTimerHandle OutHandle;
 
-	UPROPERTY(EditAnywhere, Category = "Units")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Units")
 		int _totalPoints;
 	
 protected:

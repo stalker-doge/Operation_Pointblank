@@ -31,7 +31,7 @@ public:
 
 	FTimerHandle OutHandle;
 
-	UPROPERTY(EditAnywhere, Category = "Units")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Units")
 		int _totalPoints;
 	
 protected:

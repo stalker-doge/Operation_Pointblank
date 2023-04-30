@@ -15,7 +15,7 @@ public:
 	// Sets default values for this character's properties
 	AEnemyAI();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "Units")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Units")
 		int _pointCost;
 
 protected:

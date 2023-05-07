@@ -30,17 +30,56 @@ void AEnemyUnitSpawner::Tick(float DeltaTime)
 
 void AEnemyUnitSpawner::SpawnEnemyUnit()
 {
-	if (EnemyAIBP)
+	//if (EnemyAIBP)
+	//{
+	//	FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 50;
+	//	FRotator SpawnRotation = GetActorRotation();
+	//	SpawnParams.Owner = this;
+	//	AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBP, SpawnLocation, SpawnRotation, SpawnParams);
+	//	_totalPoints = _totalPoints - UnitRef->_pointCost;
+	//	UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Spawned"));
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Not Spawned"));
+	//}
+
+	
+	if (_totalPoints >= 30)
 	{
-		FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 50;
-		FRotator SpawnRotation = GetActorRotation();
-		SpawnParams.Owner = this;
-		AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBP, SpawnLocation, SpawnRotation, SpawnParams);
-		_totalPoints = _totalPoints - UnitRef->_pointCost;
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Spawned"));
+		if (EnemyAIBPTier2)
+		{
+			FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 50;
+			FRotator SpawnRotation = GetActorRotation();
+			SpawnParams.Owner = this;
+			AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBPTier2, SpawnLocation, SpawnRotation, SpawnParams);
+			_totalPoints = _totalPoints - UnitRef->_pointCost;
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Spawned"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Not Spawned"));
+		}
+	}
+	else if (_totalPoints >= 0 && _totalPoints < 30)
+	{
+		if (EnemyAIBP)
+		{
+			FVector SpawnLocation = GetActorLocation() + FMath::VRand() * 50;
+			FRotator SpawnRotation = GetActorRotation();
+			SpawnParams.Owner = this;
+			AEnemyAI* UnitRef = GetWorld()->SpawnActor<AEnemyAI>(EnemyAIBP, SpawnLocation, SpawnRotation, SpawnParams);
+			_totalPoints = _totalPoints - UnitRef->_pointCost;
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Spawned"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Not Spawned"));
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Unit Not Spawned"));
 	}
+
 }

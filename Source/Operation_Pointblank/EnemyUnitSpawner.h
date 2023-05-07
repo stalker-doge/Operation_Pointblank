@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Units")
 		TSubclassOf<AEnemyAI> EnemyAIBP;
+	
+	UPROPERTY(EditAnywhere, Category = "Units")
+		TSubclassOf<AEnemyAI> EnemyAIBPTier2;
 
 	UFUNCTION(BlueprintCallable, Category = "Units")
 		void SpawnEnemyUnit();

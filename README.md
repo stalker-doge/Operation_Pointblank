@@ -1,6 +1,10 @@
 # Operation_Pointblank
 Portfolio project 
 
+Also viewable on:
+https://stalker-doge.itch.io/operation-pointblank
+https://stalker-doge.github.io/Portfolio/OperationPointBlank.html
+
 Controls:
 Pan the camera around by dragging the mouse towards the edges of the screen
 Zoom in and out using the mouse wheel

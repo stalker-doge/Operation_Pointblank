@@ -8,9 +8,13 @@ https://stalker-doge.github.io/Portfolio/OperationPointBlank.html
 
 Controls:
 Pan the camera around by dragging the mouse towards the edges of the screen
+
 Zoom in and out using the mouse wheel
+
 Left click and drag to select units
+
 Alt + drag Right Click to issue attack commands 
+
 Tab to open up the pause menu 
 
 Credits:
